@@ -124,6 +124,7 @@ int createCharacter(struct Character *character) {
     //creating stats
     struct Stats *stats = initStats();
     character->stats = stats;
+    free(stats);
 
     //saveCharacter(*character);
 
@@ -135,7 +136,7 @@ int createCharacter(struct Character *character) {
 //int saveCharacter(struct Character character);
 
 struct Stats* initStats() {
-    struct Stats *stats = NULL;
+    struct Stats *stats = malloc(sizeof(struct Stats));
     int points[6];
     for(int i=0; i<6; i++) {
         int rolls[4];
