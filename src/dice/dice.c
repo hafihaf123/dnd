@@ -21,11 +21,13 @@ int roll(char *roll) {
     char *copy = strdup(roll);
     if (roll == NULL || copy == NULL) {
         perror("error: input string is null");
+        free(copy);
         return -1;
     }
     char *token = strtok(copy, "d");
     if (token == NULL) {
         perror("error: tokenization failed");
+        free(copy);
         return -1;
     }
     int rolls = atoi(token);
@@ -33,9 +35,11 @@ int roll(char *roll) {
     token = strtok(NULL, "d");
     if (token == NULL) {
         perror("error: second tokenization failed");
+        free(copy);
         return -1;
     }
     int sides = atoi(token);
+    free(copy);
 
     int res = 0;
     for(int i=0; i<rolls; i++) {

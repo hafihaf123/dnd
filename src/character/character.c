@@ -19,20 +19,20 @@
 #include "../dice/dice.h"
 #include "../utils.h"
 
-struct Character characterMenu() {
+struct Character* characterMenu() {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
     int choice;
     scanf("%d", &choice);
     cleanInputBuffer();
 
-    struct Character character;
+    struct Character *character = malloc(sizeof(struct Character));
     int status = EXIT_SUCCESS;
     switch (choice) {
         case 1:
-            status = createCharacter(&character);
+            status = createCharacter(character);
             break;
         case 2:
-            //status = loadCharacter(&character);
+            //status = loadCharacter(character);
             break;
         case 3:
             exit(EXIT_SUCCESS);
@@ -58,7 +58,6 @@ int createCharacter(struct Character *character) {
         return EXIT_FAILURE;
     }
     character->name = name;
-    free(name);
 
     //creating class
     int classNum;
@@ -124,16 +123,48 @@ int createCharacter(struct Character *character) {
     //creating stats
     struct Stats *stats = initStats();
     character->stats = stats;
-    free(stats);
 
-    //saveCharacter(*character);
+    saveCharacter(*character);
 
     return EXIT_SUCCESS;
 }
 
 //int loadCharacter(struct Character *character);
 
-//int saveCharacter(struct Character character);
+int saveCharacter(const struct Character character) {
+    if((setupDir(".characters")) == EXIT_FAILURE) {
+        perror("characters directory setup failed");
+        return EXIT_FAILURE;
+    }
+    size_t fnameSize = strlen(".characters/") + strlen(character.name) + 1;
+    char *fname = (char*)malloc(fnameSize);
+    if (fname == NULL) {
+        perror("string memory allocation failed");
+        return EXIT_FAILURE;
+    }
+    strcpy(fname, ".characters/");
+    strcpy(fname, character.name);
+    
+    FILE *file = fopen(fname, "w");
+    free(fname);
+    if (file == NULL) {
+        perror("file creation failed");
+        return EXIT_FAILURE;
+    }
+    fprintf(file, "%s\n%d\n%d\n%d\n", character.name, character.charClass, character.race, character.level);
+
+    //printing stats
+    fprintf(file, "%d\n", character.stats->strength);
+    fprintf(file, "%d\n", character.stats->dexterity);
+    fprintf(file, "%d\n", character.stats->constitution);
+    fprintf(file, "%d\n", character.stats->intelligence);
+    fprintf(file, "%d\n", character.stats->wisdom);
+    fprintf(file, "%d\n", character.stats->charisma);
+
+    fclose(file);
+
+    return EXIT_SUCCESS;
+}
 
 struct Stats* initStats() {
     struct Stats *stats = malloc(sizeof(struct Stats));
@@ -158,19 +189,10 @@ struct Stats* initStats() {
     cleanInputBuffer();
     if (choice<1 || choice>6) {
         perror("invalid choice input - it must be in <1,6>");
+        free(stats);
         return NULL;
     }
     stats->strength = points[choice-1];
-
-    //constitution
-    printf("\nconstitution: ");
-    scanf("%d", &choice);
-    cleanInputBuffer();
-    if (choice<1 || choice>6) {
-        perror("invalid choice input - it must be in <1,6>");
-        return NULL;
-    }
-    stats->constitution = points[choice-1];
 
     //dexterity
     printf("\ndexterity: ");
@@ -178,9 +200,21 @@ struct Stats* initStats() {
     cleanInputBuffer();
     if (choice<1 || choice>6) {
         perror("invalid choice input - it must be in <1,6>");
+        free(stats);
         return NULL;
     }
     stats->dexterity = points[choice-1];
+
+    //constitution
+    printf("\nconstitution: ");
+    scanf("%d", &choice);
+    cleanInputBuffer();
+    if (choice<1 || choice>6) {
+        perror("invalid choice input - it must be in <1,6>");
+        free(stats);
+        return NULL;
+    }
+    stats->constitution = points[choice-1];
 
     //intelligence
     printf("\nintelligence: ");
@@ -188,6 +222,7 @@ struct Stats* initStats() {
     cleanInputBuffer();
     if (choice<1 || choice>6) {
         perror("invalid choice input - it must be in <1,6>");
+        free(stats);
         return NULL;
     }
     stats->intelligence = points[choice-1];
@@ -198,6 +233,7 @@ struct Stats* initStats() {
     cleanInputBuffer();
     if (choice<1 || choice>6) {
         perror("invalid choice input - it must be in <1,6>");
+        free(stats);
         return NULL;
     }
     stats->wisdom = points[choice-1];
@@ -208,6 +244,7 @@ struct Stats* initStats() {
     cleanInputBuffer();
     if (choice<1 || choice>6) {
         perror("invalid choice input - it must be in <1,6>");
+        free(stats);
         return NULL;
     }
     stats->charisma = points[choice-1];
@@ -215,3 +252,8 @@ struct Stats* initStats() {
     return stats;
 }
 
+void freeCharacter(struct Character *character) {
+    free(character->name);
+    free(character->stats);
+    free(character);
+}

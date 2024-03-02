@@ -46,10 +46,11 @@ struct Character {
 };
 
 //functions declaration
-struct Character characterMenu();
+struct Character* characterMenu();
 int createCharacter(struct Character *character);
 int loadCharacter(struct Character *character);
-int saveCharacter(struct Character character);
+int saveCharacter(const struct Character character);
 struct Stats* initStats();
+void freeCharacter(struct Character *character);
 
 #endif /* CHARACTER_H */

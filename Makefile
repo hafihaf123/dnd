@@ -14,14 +14,10 @@ all: $(TARGET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(info Compiling $< to $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJS)
 	@mkdir -p $(BIN_DIR)
-	# $(info SRCS: $(SRCS))
-	# $(info OBJS: $(OBJS))
-	# $(info CC $^ -o $@)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:

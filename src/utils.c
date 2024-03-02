@@ -41,3 +41,22 @@ void cleanInputBuffer() {
     int c;
     while((c=getchar()) != '\n' && c != EOF);
 }
+
+int setupDir(char *name) {
+    DIR *dir = opendir(".");
+    if (dir == NULL) {
+        closedir(dir);
+        return EXIT_FAILURE;
+    }
+    struct dirent *entry;
+    int dirExists = 0;
+    while((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, name) == 0) { 
+            dirExists = 1;
+            break;
+        }
+    }
+    if (dirExists != 1) mkdir(name, 0775);
+    closedir(dir);
+    return EXIT_SUCCESS;
+}

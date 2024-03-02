@@ -20,8 +20,11 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include <dirent.h>
+#include <sys/stat.h>
 
 int sumOfArrExceptMin(int arr[], int size);
 void cleanInputBuffer();
+int setupDir(char *name);
 
 #endif /* UTILS_H */
