@@ -60,3 +60,24 @@ int setupDir(char *name) {
     closedir(dir);
     return EXIT_SUCCESS;
 }
+
+char * addStrings(char *string1, char *string2) {
+    size_t resultSize = strlen(string1) + strlen(string2) + 1;
+    char *result = (char*)malloc(resultSize);
+    if (result == NULL) {
+        perror("string memory allocation failed");
+        return NULL;
+    }
+    strcpy(result, string1);
+    strcpy(result, string2);
+    return result;
+}
+
+int getEnumFromName(const char *name, const char * const *enumStringMap) {
+    for (size_t i = 0; i < ARR_SIZE(enumStringMap); i++) {
+        if (strcmp(name, enumStringMap[i]) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}

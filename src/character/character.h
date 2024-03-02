@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
 
 enum CharClass {
     BARBARIAN,
@@ -22,10 +23,31 @@ enum CharClass {
     WARLOCK
 };
 
+static const char * const charClassNames[] = {
+    [BARBARIAN] = "BARBARIAN",
+    [DRUID] = "DRUID",
+    [MAGE] = "MAGE",
+    [MONK] = "MONK",
+    [PALADIN] = "PALADIN",
+    [PRIEST] = "PRIEST",
+    [RANGER] = "RANGER",
+    [ROGUE] = "ROGUE",
+    [SORCERER] = "SORCERER",
+    [WARLOCK] = "WARLOCK"
+};
+
+char *charDirName = ".characters";
+
 enum CharRace {
     HUMAN,
     ELF,
     DWARF
+};
+
+static const char * const charRaceNames[] = {
+    [HUMAN] = "HUMAN",
+    [ELF] = "ELF",
+    [DWARF] = "DWARF"
 };
 
 struct Stats {
@@ -48,7 +70,7 @@ struct Character {
 //functions declaration
 struct Character* characterMenu();
 int createCharacter(struct Character *character);
-int loadCharacter(struct Character *character);
+struct Character * loadCharacter(const char *name);
 int saveCharacter(const struct Character character);
 struct Stats* initStats();
 void freeCharacter(struct Character *character);

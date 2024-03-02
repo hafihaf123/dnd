@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#define ARR_SIZE (sizeof(arr) / sizeof(arr[0]))
+
 int main();
 
 #endif /* MAIN_H */

@@ -32,13 +32,14 @@ struct Character* characterMenu() {
             status = createCharacter(character);
             break;
         case 2:
-            //status = loadCharacter(character);
+            character = loadCharacter(character);
+            if (character == NULL) status = EXIT_FAILURE;
             break;
         case 3:
             exit(EXIT_SUCCESS);
         default:
-            perror("choice not recognised");
-            exit(EXIT_FAILURE);
+            printf("choice not recognised\n");
+            status = EXIT_FAILURE;
     }
     if (status == EXIT_FAILURE) {
         //TODO
@@ -129,21 +130,70 @@ int createCharacter(struct Character *character) {
     return EXIT_SUCCESS;
 }
 
-//int loadCharacter(struct Character *character);
+struct Character * loadCharacter(const char *name) {
+    DIR *dir = opendir(charDirName);
+    if(dir == NULL) {
+        perror("opening characters directory failed");
+        return NULL;
+    }
+
+    struct dirent *entry;
+    int containsName = 0;
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, name) == 0) {
+            containsName == 1;
+            break;
+        }
+    }
+    if (containsName != 1) {
+        printf("\ncould not find character: %s", name);
+        return NULL;
+    }
+
+    char *fname = addStrings(charDirName, name);
+    
+    FILE *file = fopen(fname, "w");
+    free(fname);
+    if (file == NULL) {
+        perror("file opening failed");
+        return NULL;
+    }
+
+    struct Character *character = (struct Character *)malloc(sizeof(struct Character));
+    if (character == NULL) {
+        perror("character struct memory allocation failed");
+        return NULL;
+    }
+    //loading name
+    fscanf(file, "%s", character->name);
+    //loading class
+    char *className;
+    fscnaf(file, "%s", className);
+    character->charClass = getEnumFromName(className, charClassNames);
+    //loading race
+    char *raceName;
+    fscnaf(file, "%s", raceName);
+    character->race = getEnumFromName(raceName, charRaceNames);
+    //loading level
+    fscanf(file, "%d", character->level);
+    //loading stats
+    fscanf(file, "%d", character->stats->strength);
+    fscanf(file, "%d", character->stats->dexterity);
+    fscanf(file, "%d", character->stats->constitution);
+    fscanf(file, "%d", character->stats->intelligence);
+    fscanf(file, "%d", character->stats->wisdom);
+    fscanf(file, "%d", character->stats->charisma);
+
+    fclose(file);
+    return character;
+}
 
 int saveCharacter(const struct Character character) {
-    if((setupDir(".characters")) == EXIT_FAILURE) {
+    if((setupDir(charDirName)) == EXIT_FAILURE) {
         perror("characters directory setup failed");
         return EXIT_FAILURE;
     }
-    size_t fnameSize = strlen(".characters/") + strlen(character.name) + 1;
-    char *fname = (char*)malloc(fnameSize);
-    if (fname == NULL) {
-        perror("string memory allocation failed");
-        return EXIT_FAILURE;
-    }
-    strcpy(fname, ".characters/");
-    strcpy(fname, character.name);
+    char *fname = addStrings(charDirName, character.name);
     
     FILE *file = fopen(fname, "w");
     free(fname);
@@ -151,7 +201,7 @@ int saveCharacter(const struct Character character) {
         perror("file creation failed");
         return EXIT_FAILURE;
     }
-    fprintf(file, "%s\n%d\n%d\n%d\n", character.name, character.charClass, character.race, character.level);
+    fprintf(file, "%s\n%s\n%s\n%d\n", character.name, charClassNames[character.charClass], charRaceNames[character.race], character.level);
 
     //printing stats
     fprintf(file, "%d\n", character.stats->strength);
