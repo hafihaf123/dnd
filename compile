@@ -1,0 +1,17 @@
+#!/bin/bash
+
+clear
+
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
+
+log "Compiling with 'make'"
+make
+
+if [ $? -eq 0 ]; then
+    log "Compilation successful. Running dnd..."
+    ./bin/dnd
+else
+    log "Error: Compilation of main.c failed."
+fi

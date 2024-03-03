@@ -17,12 +17,12 @@
  */
 #include "utils.h"
 
-int sumOfArrExceptMin(int arr[]) {
+int sumOfArrExceptMin(int arr[], size_t size) {
     int min = INT_MAX;
     int sum = 0;
 
     // Iterate through the array
-    for (int i = 0; i < ARR_SIZE(arr); i++) {
+    for (int i = 0; i < size; i++) {
         // Update min if the current element is smaller
         if (arr[i] < min) {
             min = arr[i];
@@ -45,7 +45,6 @@ void cleanInputBuffer() {
 int setupDir(char *name) {
     DIR *dir = opendir(".");
     if (dir == NULL) {
-        closedir(dir);
         return EXIT_FAILURE;
     }
     struct dirent *entry;
@@ -73,8 +72,8 @@ char * addStrings(char *string1, char *string2) {
     return result;
 }
 
-int getEnumFromName(const char *name, const char * const *enumStringMap) {
-    for (size_t i = 0; i < ARR_SIZE(enumStringMap); i++) {
+int getEnumFromName(const char *name, const char * const *enumStringMap, size_t size) {
+    for (size_t i = 0; i < size; i++) {
         if (strcmp(name, enumStringMap[i]) == 0) {
             return i;
         }

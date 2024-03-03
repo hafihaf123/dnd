@@ -19,7 +19,7 @@
 #include "../dice/dice.h"
 #include "../utils.h"
 
-char *charDirName = ".characters";
+char *charDirName = ".characters/";
 
 struct Character* characterMenu() {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
@@ -33,8 +33,8 @@ struct Character* characterMenu() {
         case 1:
             status = createCharacter(character);
             break;
-        case 2:
-            char *loadName;
+        case 2: {
+            char *loadName = NULL;
             size_t len = 0;
             printf("\nname: ");
             ssize_t read = getline(&loadName, &len, stdin);
@@ -45,7 +45,9 @@ struct Character* characterMenu() {
             }
 
             character = loadCharacter(loadName);
+            free(loadName);
             if (character == NULL) status = EXIT_FAILURE;
+        }
             break;
         case 3:
             freeCharacter(character);
@@ -159,6 +161,7 @@ struct Character * loadCharacter(char *name) {
             break;
         }
     }
+    closedir(dir);
     if (containsName != 1) {
         printf("\ncould not find character: %s", name);
         return NULL;
@@ -183,12 +186,12 @@ struct Character * loadCharacter(char *name) {
     //loading class
     char *className = (char *)malloc(15);
     fscanf(file, "%s", className);
-    character->charClass = getEnumFromName(className, charClassNames);
+    character->charClass = getEnumFromName(className, charClassNames, ARR_SIZE(charClassNames));
     free(className);
     //loading race
     char *raceName = (char *)malloc(15);
     fscanf(file, "%s", raceName);
-    character->race = getEnumFromName(raceName, charRaceNames);
+    character->race = getEnumFromName(raceName, charRaceNames, ARR_SIZE(charRaceNames));
     free(raceName);
     //loading level
     fscanf(file, "%d", &character->level);
@@ -240,7 +243,7 @@ struct Stats* initStats() {
         for (int ii=0; ii<4; ii++) {
             rolls[ii] = roll("1d6");
         }
-        points[i] = sumOfArrExceptMin(rolls);
+        points[i] = sumOfArrExceptMin(rolls, ARR_SIZE(rolls));
     }
 
     printf("\npoints for stats:\n");

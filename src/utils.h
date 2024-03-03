@@ -25,12 +25,12 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#define ARR_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+#define ARR_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 
-int sumOfArrExceptMin(int arr[]);
+int sumOfArrExceptMin(int arr[], size_t size);
 void cleanInputBuffer();
 int setupDir(char *name);
 char * addStrings(char *string1, char *string2);
-int getEnumFromName(const char *name, const char * const *enumStringMap);
+int getEnumFromName(const char *name, const char * const *enumStringMap, size_t size);
 
 #endif /* UTILS_H */
