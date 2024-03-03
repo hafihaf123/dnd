@@ -20,11 +20,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <limits.h>
 #include <dirent.h>
 #include <sys/stat.h>
 
-int sumOfArrExceptMin(int arr[], int size);
+#define ARR_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+int sumOfArrExceptMin(int arr[]);
 void cleanInputBuffer();
 int setupDir(char *name);
 char * addStrings(char *string1, char *string2);

@@ -19,8 +19,8 @@
 #define DICE_H
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include <errno.h>
 
 int roll(char *roll);
 

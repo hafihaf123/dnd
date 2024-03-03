@@ -17,12 +17,12 @@
  */
 #include "utils.h"
 
-int sumOfArrExceptMin(int arr[], int size) {
+int sumOfArrExceptMin(int arr[]) {
     int min = INT_MAX;
     int sum = 0;
 
     // Iterate through the array
-    for (int i = 0; i<size; i++) {
+    for (int i = 0; i < ARR_SIZE(arr); i++) {
         // Update min if the current element is smaller
         if (arr[i] < min) {
             min = arr[i];
@@ -69,7 +69,7 @@ char * addStrings(char *string1, char *string2) {
         return NULL;
     }
     strcpy(result, string1);
-    strcpy(result, string2);
+    strcat(result, string2);
     return result;
 }
 

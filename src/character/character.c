@@ -19,23 +19,36 @@
 #include "../dice/dice.h"
 #include "../utils.h"
 
+char *charDirName = ".characters";
+
 struct Character* characterMenu() {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
     int choice;
     scanf("%d", &choice);
     cleanInputBuffer();
 
-    struct Character *character = malloc(sizeof(struct Character));
+    struct Character *character = initialiseCharacter();
     int status = EXIT_SUCCESS;
     switch (choice) {
         case 1:
             status = createCharacter(character);
             break;
         case 2:
-            character = loadCharacter(character);
+            char *loadName;
+            size_t len = 0;
+            printf("\nname: ");
+            ssize_t read = getline(&loadName, &len, stdin);
+            if (read == -1) {
+                perror("read of name failed");
+                status = EXIT_FAILURE;
+                break;
+            }
+
+            character = loadCharacter(loadName);
             if (character == NULL) status = EXIT_FAILURE;
             break;
         case 3:
+            freeCharacter(character);
             exit(EXIT_SUCCESS);
         default:
             printf("choice not recognised\n");
@@ -43,6 +56,7 @@ struct Character* characterMenu() {
     }
     if (status == EXIT_FAILURE) {
         //TODO
+        freeCharacter(character);
         exit(EXIT_FAILURE);
     }
     return character;
@@ -130,7 +144,7 @@ int createCharacter(struct Character *character) {
     return EXIT_SUCCESS;
 }
 
-struct Character * loadCharacter(const char *name) {
+struct Character * loadCharacter(char *name) {
     DIR *dir = opendir(charDirName);
     if(dir == NULL) {
         perror("opening characters directory failed");
@@ -141,7 +155,7 @@ struct Character * loadCharacter(const char *name) {
     int containsName = 0;
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, name) == 0) {
-            containsName == 1;
+            containsName = 1;
             break;
         }
     }
@@ -159,7 +173,7 @@ struct Character * loadCharacter(const char *name) {
         return NULL;
     }
 
-    struct Character *character = (struct Character *)malloc(sizeof(struct Character));
+    struct Character *character = initialiseCharacter();
     if (character == NULL) {
         perror("character struct memory allocation failed");
         return NULL;
@@ -167,22 +181,24 @@ struct Character * loadCharacter(const char *name) {
     //loading name
     fscanf(file, "%s", character->name);
     //loading class
-    char *className;
-    fscnaf(file, "%s", className);
+    char *className = (char *)malloc(15);
+    fscanf(file, "%s", className);
     character->charClass = getEnumFromName(className, charClassNames);
+    free(className);
     //loading race
-    char *raceName;
-    fscnaf(file, "%s", raceName);
+    char *raceName = (char *)malloc(15);
+    fscanf(file, "%s", raceName);
     character->race = getEnumFromName(raceName, charRaceNames);
+    free(raceName);
     //loading level
-    fscanf(file, "%d", character->level);
+    fscanf(file, "%d", &character->level);
     //loading stats
-    fscanf(file, "%d", character->stats->strength);
-    fscanf(file, "%d", character->stats->dexterity);
-    fscanf(file, "%d", character->stats->constitution);
-    fscanf(file, "%d", character->stats->intelligence);
-    fscanf(file, "%d", character->stats->wisdom);
-    fscanf(file, "%d", character->stats->charisma);
+    fscanf(file, "%d", &character->stats->strength);
+    fscanf(file, "%d", &character->stats->dexterity);
+    fscanf(file, "%d", &character->stats->constitution);
+    fscanf(file, "%d", &character->stats->intelligence);
+    fscanf(file, "%d", &character->stats->wisdom);
+    fscanf(file, "%d", &character->stats->charisma);
 
     fclose(file);
     return character;
@@ -224,7 +240,7 @@ struct Stats* initStats() {
         for (int ii=0; ii<4; ii++) {
             rolls[ii] = roll("1d6");
         }
-        points[i] = sumOfArrExceptMin(rolls, 4);
+        points[i] = sumOfArrExceptMin(rolls);
     }
 
     printf("\npoints for stats:\n");
@@ -303,7 +319,26 @@ struct Stats* initStats() {
 }
 
 void freeCharacter(struct Character *character) {
-    free(character->name);
-    free(character->stats);
-    free(character);
+    if (character != NULL) {
+        // Free the name member if it has been allocated
+        if (character->name != NULL) {
+            free(character->name);
+        }
+
+        // Free the stats member if it has been allocated
+        if (character->stats != NULL) {
+            free(character->stats);
+        }
+
+        // Free the entire Character structure
+        free(character);
+    }
+}
+
+struct Character * initialiseCharacter() {
+    struct Character *character = (struct Character*)malloc(sizeof(struct Character));
+    character->name = NULL;
+    character->stats = NULL;
+
+    return character;
 }

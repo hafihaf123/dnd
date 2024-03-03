@@ -20,13 +20,13 @@
 int roll(char *roll) {
     char *copy = strdup(roll);
     if (roll == NULL || copy == NULL) {
-        perror("error: input string is null");
+        printf("error: input string is null");
         free(copy);
         return -1;
     }
     char *token = strtok(copy, "d");
     if (token == NULL) {
-        perror("error: tokenization failed");
+        printf("error: tokenization failed");
         free(copy);
         return -1;
     }
@@ -34,7 +34,7 @@ int roll(char *roll) {
 
     token = strtok(NULL, "d");
     if (token == NULL) {
-        perror("error: second tokenization failed");
+        printf("error: second tokenization failed");
         free(copy);
         return -1;
     }

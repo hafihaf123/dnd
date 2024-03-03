@@ -36,7 +36,7 @@ static const char * const charClassNames[] = {
     [WARLOCK] = "WARLOCK"
 };
 
-char *charDirName = ".characters";
+extern char *charDirName;
 
 enum CharRace {
     HUMAN,
@@ -70,9 +70,10 @@ struct Character {
 //functions declaration
 struct Character* characterMenu();
 int createCharacter(struct Character *character);
-struct Character * loadCharacter(const char *name);
+struct Character * loadCharacter(char *name);
 int saveCharacter(const struct Character character);
 struct Stats* initStats();
 void freeCharacter(struct Character *character);
+struct Character * initialiseCharacter();
 
 #endif /* CHARACTER_H */
