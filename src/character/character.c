@@ -28,6 +28,10 @@ struct Character* characterMenu() {
     cleanInputBuffer();
 
     struct Character *character = initialiseCharacter();
+    if (character == NULL) {
+        return NULL;
+    }
+    
     int status = EXIT_SUCCESS;
     switch (choice) {
         case 1:
@@ -44,7 +48,7 @@ struct Character* characterMenu() {
                 break;
             }
 
-            character = loadCharacter(loadName);
+            status = loadCharacter(loadName, character);
             free(loadName);
             if (character == NULL) status = EXIT_FAILURE;
         }
@@ -146,11 +150,11 @@ int createCharacter(struct Character *character) {
     return EXIT_SUCCESS;
 }
 
-struct Character * loadCharacter(char *name) {
+int loadCharacter(char *name, struct Character *character) {
     DIR *dir = opendir(charDirName);
     if(dir == NULL) {
         perror("opening characters directory failed");
-        return NULL;
+        return EXIT_FAILURE;
     }
 
     struct dirent *entry;
@@ -164,25 +168,31 @@ struct Character * loadCharacter(char *name) {
     closedir(dir);
     if (containsName != 1) {
         printf("\ncould not find character: %s", name);
-        return NULL;
+        return EXIT_FAILURE;
     }
 
     char *fname = addStrings(charDirName, name);
     
-    FILE *file = fopen(fname, "w");
+    FILE *file = fopen(fname, "r");
     free(fname);
     if (file == NULL) {
         perror("file opening failed");
-        return NULL;
+        return EXIT_FAILURE;
     }
 
-    struct Character *character = initialiseCharacter();
     if (character == NULL) {
-        perror("character struct memory allocation failed");
-        return NULL;
+        perror("character struct argument not properly initialised");
+        return EXIT_FAILURE;
     }
     //loading name
-    fscanf(file, "%s", character->name);
+    size_t nameSize = strlen(name) + 1;
+    character->name = (char *)realloc(character->name, nameSize);
+    if (character->name == NULL) {
+        perror("character name allocation failed");
+        return EXIT_FAILURE;
+    }
+
+    strcpy(character->name, name);
     //loading class
     char *className = (char *)malloc(15);
     fscanf(file, "%s", className);
@@ -204,7 +214,7 @@ struct Character * loadCharacter(char *name) {
     fscanf(file, "%d", &character->stats->charisma);
 
     fclose(file);
-    return character;
+    return EXIT_SUCCESS;
 }
 
 int saveCharacter(const struct Character character) {
@@ -220,7 +230,7 @@ int saveCharacter(const struct Character character) {
         perror("file creation failed");
         return EXIT_FAILURE;
     }
-    fprintf(file, "%s\n%s\n%s\n%d\n", character.name, charClassNames[character.charClass], charRaceNames[character.race], character.level);
+    fprintf(file, "%s\n%s\n%d\n", charClassNames[character.charClass], charRaceNames[character.race], character.level);
 
     //printing stats
     fprintf(file, "%d\n", character.stats->strength);
@@ -322,26 +332,35 @@ struct Stats* initStats() {
 }
 
 void freeCharacter(struct Character *character) {
+    printf("1");
     if (character != NULL) {
         // Free the name member if it has been allocated
         if (character->name != NULL) {
+            printf("2");
             free(character->name);
         }
 
         // Free the stats member if it has been allocated
         if (character->stats != NULL) {
+            printf("3");
             free(character->stats);
         }
 
         // Free the entire Character structure
+        printf("4");
         free(character);
     }
 }
 
 struct Character * initialiseCharacter() {
     struct Character *character = (struct Character*)malloc(sizeof(struct Character));
-    character->name = NULL;
-    character->stats = NULL;
+    if (character == NULL)
+    {
+        return NULL;
+    }
+    
+    character->name = (char *)malloc(1);
+    character->stats = (struct Stats *)malloc(sizeof(struct Stats));
 
     return character;
 }

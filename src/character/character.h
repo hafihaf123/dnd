@@ -70,7 +70,7 @@ struct Character {
 //functions declaration
 struct Character* characterMenu();
 int createCharacter(struct Character *character);
-struct Character * loadCharacter(char *name);
+int loadCharacter(char *name, struct Character *character);
 int saveCharacter(const struct Character character);
 struct Stats* initStats();
 void freeCharacter(struct Character *character);
