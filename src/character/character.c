@@ -49,7 +49,6 @@ struct Character* characterMenu() {
             }
 
             status = loadCharacter(loadName, character);
-            free(loadName);
             if (character == NULL) status = EXIT_FAILURE;
         }
             break;
@@ -185,33 +184,39 @@ int loadCharacter(char *name, struct Character *character) {
         return EXIT_FAILURE;
     }
     //loading name
-    size_t nameSize = strlen(name) + 1;
-    character->name = (char *)realloc(character->name, nameSize);
-    if (character->name == NULL) {
-        perror("character name allocation failed");
-        return EXIT_FAILURE;
-    }
-
-    strcpy(character->name, name);
+    character->name = name;
+    printf("name: %s\n", name);
+    printf("character name: %s\n", character->name);
     //loading class
     char *className = (char *)malloc(15);
     fscanf(file, "%s", className);
     character->charClass = getEnumFromName(className, charClassNames, ARR_SIZE(charClassNames));
+    printf("class name: %s\n", className);
     free(className);
     //loading race
     char *raceName = (char *)malloc(15);
     fscanf(file, "%s", raceName);
     character->race = getEnumFromName(raceName, charRaceNames, ARR_SIZE(charRaceNames));
+    printf("race name: %s\n", raceName);
     free(raceName);
     //loading level
-    fscanf(file, "%d", &character->level);
+    int level;
+    fscanf(file, "%d", &level);
+    character->level = level;
+    printf("level: %d\n", character->level);
     //loading stats
-    fscanf(file, "%d", &character->stats->strength);
-    fscanf(file, "%d", &character->stats->dexterity);
-    fscanf(file, "%d", &character->stats->constitution);
-    fscanf(file, "%d", &character->stats->intelligence);
-    fscanf(file, "%d", &character->stats->wisdom);
-    fscanf(file, "%d", &character->stats->charisma);
+    struct Stats *stats = (struct Stats *)malloc(sizeof(struct Stats));
+
+    int strength;
+    fscanf(file, "%d", &strength);
+    stats->strength = strength;
+    fscanf(file, "%d", &stats->dexterity);
+    fscanf(file, "%d", &stats->constitution);
+    fscanf(file, "%d", &stats->intelligence);
+    fscanf(file, "%d", &stats->wisdom);
+    fscanf(file, "%d", &stats->charisma);
+
+    character->stats = stats;
 
     fclose(file);
     return EXIT_SUCCESS;
@@ -359,8 +364,8 @@ struct Character * initialiseCharacter() {
         return NULL;
     }
     
-    character->name = (char *)malloc(1);
-    character->stats = (struct Stats *)malloc(sizeof(struct Stats));
+    character->name = NULL;
+    character->stats = NULL;
 
     return character;
 }
