@@ -10,54 +10,12 @@
 #include <ctype.h>
 #include <sys/types.h>
 
-enum CharClass {
-    BARBARIAN,
-    DRUID,
-    MAGE,
-    MONK,
-    PALADIN,
-    PRIEST,
-    RANGER,
-    ROGUE,
-    SORCERER,
-    WARLOCK
-};
-
-static const char * const charClassNames[] = {
-    [BARBARIAN] = "BARBARIAN",
-    [DRUID] = "DRUID",
-    [MAGE] = "MAGE",
-    [MONK] = "MONK",
-    [PALADIN] = "PALADIN",
-    [PRIEST] = "PRIEST",
-    [RANGER] = "RANGER",
-    [ROGUE] = "ROGUE",
-    [SORCERER] = "SORCERER",
-    [WARLOCK] = "WARLOCK"
-};
+//included headers
+#include "stats.h"
+#include "char_class.h"
+#include "char_race.h"
 
 extern char *charDirName;
-
-enum CharRace {
-    HUMAN,
-    ELF,
-    DWARF
-};
-
-static const char * const charRaceNames[] = {
-    [HUMAN] = "HUMAN",
-    [ELF] = "ELF",
-    [DWARF] = "DWARF"
-};
-
-struct Stats {
-    int strength;
-    int constitution;
-    int dexterity;
-    int intelligence;
-    int wisdom;
-    int charisma;
-};
 
 struct Character {
     char *name;
@@ -70,9 +28,8 @@ struct Character {
 //functions declaration
 struct Character* characterMenu();
 int createCharacter(struct Character *character);
-int loadCharacter(char *name, struct Character *character);
+int loadCharacter(struct Character *character);
 int saveCharacter(const struct Character character);
-struct Stats* initStats();
 void freeCharacter(struct Character *character);
 struct Character * initialiseCharacter();
 

@@ -32,5 +32,6 @@ void cleanInputBuffer();
 int setupDir(char *name);
 char * addStrings(char *string1, char *string2);
 int getEnumFromName(const char *name, const char * const *enumStringMap, size_t size);
+char * readInput(char *message);
 
 #endif /* UTILS_H */

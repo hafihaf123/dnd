@@ -4,6 +4,7 @@ CFLAGS = -Wall -g -fsanitize=address -fno-omit-frame-pointer
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
+CHAR_DIR = .characters
 
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -21,4 +22,4 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -rf $(OBJ_DIR)/*.o $(TARGET)
+	rm -rf $(OBJ_DIR) $(BIN_DIR) $(CHAR_DIR)

@@ -80,3 +80,17 @@ int getEnumFromName(const char *name, const char * const *enumStringMap, size_t 
     }
     return -1;
 }
+
+char * readInput(char *message) {
+    char *input = NULL;
+    size_t len = 0;
+    printf("\n%s: ", message);
+    ssize_t read = getline(&input, &len, stdin);
+    if (read == -1) {
+        perror("input read failed");
+        return NULL;
+    }
+    char *newlinePos = strchr(input, '\n');
+    if (newlinePos != NULL) *newlinePos = '\0';
+    return input;
+}
