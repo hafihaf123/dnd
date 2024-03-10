@@ -23,8 +23,7 @@ char *charDirName = ".characters/";
 struct Character* characterMenu() {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
     int choice;
-    scanf("%d", &choice);
-    cleanInputBuffer();
+    choice = getNumberInput("");
 
     struct Character *character = initialiseCharacter();
     if (character == NULL) {
@@ -58,50 +57,50 @@ struct Character* characterMenu() {
 
 int createCharacter(struct Character *character) {
     //creating name
-    char *name = readInput("name");
+    char *name = getStringInput("name: ");
     character->name = name;
 
     //creating class
-    int classNum;
     printf("class:\n\n");
-    for (int i=0; i < sizeof(charClassNames) / sizeof(charClassNames[0]); i++) {
+    for (int i=0; i < ARR_SIZE(charClassNames); i++) {
         printf("\t(%d) %s\n", i+1, charClassNames[i]);
     }
-    printf("\n\t-> ");
-    scanf("%d", &classNum);
-    cleanInputBuffer();
+    int classNum = getNumberInput("\n\t-> ");
+    if (classNum < 1 || classNum > ARR_SIZE(charClassNames)) {
+        error("invalid input");
+        return EXIT_FAILURE;
+    }
     enum CharClass charClass = --classNum;
     character->charClass = charClass;
 
     //creating race
-    int raceNum;
     printf("race:\n\n");
-    for (int i=0; i<sizeof(charRaceNames) / sizeof(charRaceNames[0]); i++) {
+    for (int i=0; i < ARR_SIZE(charRaceNames); i++) {
         printf("\t(%d) %s\n", i+1, charRaceNames[i]);
     }
-    printf("\n\t-> ");
-    scanf("%d", &raceNum);
-    cleanInputBuffer();
+    int raceNum = getNumberInput("\n\t-> ");
+    if (raceNum < 1 || raceNum > ARR_SIZE(charRaceNames)) {
+        error("invalid input");
+        return EXIT_FAILURE;
+    }
     enum CharRace race = --raceNum;
     character->race = race;
 
     //creating level
     printf("\ndo you want to start from default level (level 1)? Y/N: ");
-    char defaultLevel;
-    scanf("%c", &defaultLevel);
+    char defaultLevel = getchar();
+    cleanInputBuffer();
     if (defaultLevel == 'Y') character->level = 1;
     else if (defaultLevel == 'N') {
-        printf("\nstarting level: ");
         int startingLevel;
-        scanf("%d", &startingLevel);
-        cleanInputBuffer();
+        startingLevel = getNumberInput("\nstarting level: ");
         if (startingLevel<1 || startingLevel>20){
-            perror("invalid starting level");
+            error("invalid starting level");
             return EXIT_FAILURE;
         }
         character->level = startingLevel;
     } else {
-        perror("invalid input");
+        error("invalid input");
         return EXIT_FAILURE;
     }
 
@@ -118,14 +117,14 @@ int createCharacter(struct Character *character) {
 }
 
 int loadCharacter(struct Character *character) {
-    char *name = readInput("name");
+    char *name = getStringInput("name");
     if (name == NULL) {
         return EXIT_FAILURE;
     }
 
     DIR *dir = opendir(charDirName);
     if (dir == NULL) {
-        perror("opening characters directory failed");
+        error("opening characters directory failed");
         free(name);
         return EXIT_FAILURE;
     }
@@ -150,13 +149,13 @@ int loadCharacter(struct Character *character) {
     FILE *file = fopen(fname, "r");
     free(fname);
     if (file == NULL) {
-        perror("file opening failed");
+        error("file opening failed");
         free(name);
         return EXIT_FAILURE;
     }
 
     if (character == NULL) {
-        perror("character struct argument not properly initialised");
+        error("character struct argument not properly initialised");
         free(name);
         return EXIT_FAILURE;
     }
@@ -195,7 +194,7 @@ int loadCharacter(struct Character *character) {
 
 int saveCharacter(const struct Character character) {
     if((setupDir(charDirName)) == EXIT_FAILURE) {
-        perror("characters directory setup failed");
+        error("characters directory setup failed");
         return EXIT_FAILURE;
     }
     char *fname = addStrings(charDirName, character.name);
@@ -203,7 +202,7 @@ int saveCharacter(const struct Character character) {
     FILE *file = fopen(fname, "w");
     free(fname);
     if (file == NULL) {
-        perror("file creation failed");
+        error("file creation failed");
         return EXIT_FAILURE;
     }
     fprintf(file, "%s\n%s\n%d\n", charClassNames[character.charClass], charRaceNames[character.race], character.level);

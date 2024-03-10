@@ -4,7 +4,6 @@
 //included libraries
 #include <stdlib.h>
 #include <stdio.h>
-#include <errno.h>
 #include <dirent.h>
 #include <string.h>
 #include <ctype.h>

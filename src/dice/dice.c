@@ -16,25 +16,26 @@
  * =====================================================================================
  */
 #include "dice.h"
+#include "utils.h"
 
 int roll(char *roll) {
     if (roll == NULL) {
-        printf("error: input cannot be null\n");
+        error("input cannot be null");
         return -1;
     }
     if (strchr(roll, 'd') == NULL) {
-        printf("error: invalid input format - it doesn't include 'd'\n");
+        error("invalid input format - it doesn't include 'd'");
         return -1;
     }
     char *copy = strdup(roll);
     if (copy == NULL) {
-        printf("error: string duplication failed\n");
+        error("string duplication failed");
         free(copy);
         return -1;
     }
     char *token = strtok(copy, "d");
     if (token == NULL || atoi(token)<0) {
-        printf("error: tokenization failed\n");
+        error("tokenization failed");
         free(copy);
         return -1;
     }
@@ -42,7 +43,7 @@ int roll(char *roll) {
 
     token = strtok(NULL, "d");
     if (token == NULL || atoi(token)<=0) {
-        printf("error: second tokenization failed\n");
+        error("second tokenization failed");
         free(copy);
         return -1;
     }

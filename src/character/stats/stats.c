@@ -47,17 +47,16 @@ struct Stats* initStats() {
     int choice[6];
     for (int i=0; i<6; i++) {
         int n;
-        printf("\n%s: ", statNames[i]);
-        scanf("%d", &n);
-        cleanInputBuffer();
+        printf("\n%s", statNames[i]);
+        n = getNumberInput(": ");
         if (n<1 || n>6) {
-            perror("invalid choice input - it must be in <1,6>");
+            error("invalid choice input - it must be in <1,6>");
             free(stats);
             return NULL;
         }
         for (int ii=0; ii<i; ii++) {
             if (n == choice[ii]+1) {
-                perror("invalid choice input - it was used previously");
+                error("invalid choice input - it was used previously");
                 free(stats);
                 return NULL;
             }
