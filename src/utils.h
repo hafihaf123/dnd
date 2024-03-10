@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 #define ARR_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
 

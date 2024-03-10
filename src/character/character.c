@@ -16,7 +16,7 @@
  * =====================================================================================
  */
 #include "character.h"
-#include "../utils.h"
+#include "utils.h"
 
 char *charDirName = ".characters/";
 

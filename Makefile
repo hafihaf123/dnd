@@ -11,7 +11,6 @@ CC = gcc
 CFLAGS = -Wall -g -fsanitize=address -fno-omit-frame-pointer
 TEST_FLAGS = -lrt -lm -Iminunit $(CFLAGS)
 CFLAGS += $(shell find $(SRC_DIR) -name "*.h" -type f -exec dirname {} \; | sort -u | sed 's/.*/-I&/')
-# TEST_FLAGS += $(shell find $(SRC_DIR) -name "*.h" -type f -exec dirname {} \; | sort -u | sed 's/.*/-I&/')
 
 SRC_DIR = src
 OBJ_DIR = obj

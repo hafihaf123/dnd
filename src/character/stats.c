@@ -16,8 +16,8 @@
  * =====================================================================================
  */
 #include "stats.h"
-#include "../dice/dice.h"
-#include "../utils.h"
+#include "dice.h"
+#include "utils.h"
 
 const char *statNames[] = {
     "strength",
