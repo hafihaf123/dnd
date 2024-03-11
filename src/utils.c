@@ -160,8 +160,10 @@ int getNumberInput(const char *message) {
         if (endptr == input) {
             printf("Incorrect integer input. Please enter a valid number.\n");
         } else {
+            free(input);
             return number;
         }
+        free(input);
     }
 }
 
