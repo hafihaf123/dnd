@@ -117,7 +117,7 @@ int createCharacter(struct Character *character) {
 }
 
 int loadCharacter(struct Character *character) {
-    char *name = getStringInput("name");
+    char *name = getStringInput("name: ");
     if (name == NULL) {
         return EXIT_FAILURE;
     }
@@ -139,7 +139,9 @@ int loadCharacter(struct Character *character) {
     }
     closedir(dir);
     if (containsName != 1) {
-        printf("\ncould not find character: %s", name);
+        char *message = addStrings("could not find character with name ", name);
+        error(message);
+        free(message);
         free(name);
         return EXIT_FAILURE;
     }
