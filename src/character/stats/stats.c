@@ -15,18 +15,11 @@
  *
  * =====================================================================================
  */
+///file stats.c
+
 #include "stats.h"
 #include "dice.h"
 #include "utils.h"
-
-const char *statNames[] = {
-    "strength",
-    "constitution",
-    "dexterity",
-    "intelligence",
-    "wisdom",
-    "charisma"
-};
 
 struct Stats* initStats() {
     struct Stats *stats = malloc(sizeof(struct Stats));

@@ -42,7 +42,7 @@ struct Character* characterMenu() {
             break;
         case 3:
             freeCharacter(character);
-            exit(EXIT_SUCCESS);
+            return NULL;
         default:
             printf("choice not recognised\n");
             status = EXIT_FAILURE;
@@ -50,7 +50,7 @@ struct Character* characterMenu() {
     if (status == EXIT_FAILURE) {
         //TODO
         freeCharacter(character);
-        exit(EXIT_FAILURE);
+        return NULL;
     }
     return character;
 }
@@ -225,17 +225,14 @@ int saveCharacter(const struct Character character) {
 
 void freeCharacter(struct Character *character) {
     if (character != NULL) {
-        // Free the name member if it has been allocated
         if (character->name != NULL) {
             free(character->name);
         }
 
-        // Free the stats member if it has been allocated
         if (character->stats != NULL) {
             free(character->stats);
         }
 
-        // Free the entire Character structure
         free(character);
     }
 }

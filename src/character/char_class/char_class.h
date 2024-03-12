@@ -15,9 +15,12 @@
  *
  * =====================================================================================
  */
+/// @file char_class.h
+
 #ifndef CHAR_CLASS_H
 #define CHAR_CLASS_H
 
+/// @brief enum containing the possible character classes
 enum CharClass {
     BARBARIAN,
     DRUID,
@@ -31,6 +34,7 @@ enum CharClass {
     WARLOCK
 };
 
+/// @brief array containing the labels for #CharClass
 static const char * const charClassNames[] = {
     [BARBARIAN] = "BARBARIAN",
     [DRUID] = "DRUID",
