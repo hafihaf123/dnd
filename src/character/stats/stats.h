@@ -33,7 +33,7 @@ struct Stats {
     int charisma;
 };
 
-/// @brief array containing the labels for #Stats members
+/// @brief array containing the labels for Stats members
 static const char * const statNames[] = {
     "strength",
     "constitution",
@@ -44,9 +44,9 @@ static const char * const statNames[] = {
 };
 
 /**
- * @brief function for initialising a #Stats instance with user input
+ * @brief function for initialising a Stats instance with user input
  * 
- * @return struct Stats* initialised #Stats instance (must be freed)
+ * @return struct Stats* initialised Stats instance (must be freed)
  */
 struct Stats* initStats();
 
