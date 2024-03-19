@@ -61,7 +61,7 @@ int setupDir(char *name) {
     return EXIT_SUCCESS;
 }
 
-char * addStrings(char *string1, char *string2) {
+char * addStrings(const char *string1, const char *string2) {
     size_t resultSize = strlen(string1) + strlen(string2) + 1;
     char *result = (char*)malloc(resultSize);
     if (result == NULL) {

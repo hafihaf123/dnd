@@ -63,7 +63,7 @@ int setupDir(char *name);
  * @param string2 second string
  * @return char* concated string of the 2 arguments
  */
-char * addStrings(char *string1, char *string2);
+char * addStrings(const char *string1, const char *string2);
 
 /**
  * @brief Get the Enum index from name of its label

@@ -13,17 +13,9 @@
 #include "stats.h"
 #include "char_class.h"
 #include "char_race.h"
+#include "database.h"
 
-extern char *charDirName; ///< name of directory where characters are saved
-
-/// @brief structure for characters
-struct Character {
-    char *name;
-    enum CharClass charClass;
-    enum CharRace race;
-    int level;
-    struct Stats *stats;
-};
+// extern char *charDirName; ///< name of directory where characters are saved
 
 /**
  * @brief entry point for selecting a character
@@ -31,11 +23,12 @@ struct Character {
  * @details opts the user for input (integer from 1 to 3) and calls the appropriate functions:
  * 1. createCharacter()
  * 2. loadCharacter()
- * 3. exits by returning NULL
+ * 3. exit(EXIT_SUCCESS)
  * 
- * @return struct Character* the selected (or created) character; returns NULL for failure (or choice exit)
+ * @param db database for storing / loading the Character
+ * @return struct Character* the selected (or created) character - failure returns NULL
  */
-struct Character* characterMenu();
+struct Character* characterMenu(sqlite3 *db);
 
 /**
  * @brief create a Character object from user input
@@ -43,25 +36,10 @@ struct Character* characterMenu();
  * @details also calls saveCharacter() to save the created character
  * 
  * @param character pointer to Character allocated by characterMenu()
+ * @param db database for storing the Character
  * @return int 0 (EXIT_SUCCESS) or 1 (EXIT_FAILURE)
  */
-int createCharacter(struct Character *character);
-
-/**
- * @brief load a Character object from file in #charDirName
- * 
- * @param character pointer to Character allocated by characterMenu()
- * @return int 0 (EXIT_SUCCESS) or 1 (EXIT_FAILURE)
- */
-int loadCharacter(struct Character *character);
-
-/**
- * @brief saves the Character into a file to #charDirName (calls setupDir() if not exists)
- * 
- * @param character Character to save
- * @return int 0 (EXIT_SUCCESS) or 1 (EXIT_FAILURE)
- */
-int saveCharacter(const struct Character character);
+int createCharacter(struct Character *character, sqlite3 *db);
 
 /**
  * @brief function to properly free the Character struct

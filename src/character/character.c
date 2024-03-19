@@ -20,7 +20,7 @@
 
 char *charDirName = ".characters/";
 
-struct Character* characterMenu() {
+struct Character* characterMenu(sqlite3 *db) {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
     int choice;
     choice = getNumberInput("");
@@ -33,16 +33,16 @@ struct Character* characterMenu() {
     int status = EXIT_SUCCESS;
     switch (choice) {
         case 1:
-            status = createCharacter(character);
+            status = createCharacter(character, db);
             break;
         case 2: {
-            status = loadCharacter(character);
+            status = loadCharacter(character, db);
             if (character == NULL) status = EXIT_FAILURE;
             }
             break;
         case 3:
             freeCharacter(character);
-            return NULL;
+            exit(EXIT_SUCCESS);
         default:
             printf("choice not recognised\n");
             status = EXIT_FAILURE;
@@ -55,7 +55,7 @@ struct Character* characterMenu() {
     return character;
 }
 
-int createCharacter(struct Character *character) {
+int createCharacter(struct Character *character, sqlite3 *db) {
     //creating name
     char *name = getStringInput("name: ");
     character->name = name;
@@ -111,117 +111,10 @@ int createCharacter(struct Character *character) {
     }
     character->stats = stats;
 
-    saveCharacter(*character);
+    saveCharacter(*character, db);
 
     return EXIT_SUCCESS;
 }
-
-int loadCharacter(struct Character *character) {
-    char *name = getStringInput("name: ");
-    if (name == NULL) {
-        return EXIT_FAILURE;
-    }
-
-    DIR *dir = opendir(charDirName);
-    if (dir == NULL) {
-        error("opening characters directory failed");
-        free(name);
-        return EXIT_FAILURE;
-    }
-
-    struct dirent *entry;
-    int containsName = 0;
-    while ((entry = readdir(dir)) != NULL) {
-        if (strcmp(entry->d_name, name) == 0) {
-            containsName = 1;
-            break;
-        }
-    }
-    closedir(dir);
-    if (containsName != 1) {
-        char *message = addStrings("could not find character with name ", name);
-        error(message);
-        free(message);
-        free(name);
-        return EXIT_FAILURE;
-    }
-
-    char *fname = addStrings(charDirName, name);
-    
-    FILE *file = fopen(fname, "r");
-    free(fname);
-    if (file == NULL) {
-        error("file opening failed");
-        free(name);
-        return EXIT_FAILURE;
-    }
-
-    if (character == NULL) {
-        error("character struct argument not properly initialised");
-        free(name);
-        return EXIT_FAILURE;
-    }
-
-    //loading name
-    character->name = name;
-    //loading class
-    char *className = (char *)malloc(15);
-    fscanf(file, "%s", className);
-    character->charClass = getEnumFromName(className, charClassNames, ARR_SIZE(charClassNames));
-    free(className);
-    //loading race
-    char *raceName = (char *)malloc(15);
-    fscanf(file, "%s", raceName);
-    character->race = getEnumFromName(raceName, charRaceNames, ARR_SIZE(charRaceNames));
-    free(raceName);
-    //loading level
-    int level;
-    fscanf(file, "%d", &level);
-    character->level = level;
-    //loading stats
-    struct Stats *stats = (struct Stats *)malloc(sizeof(struct Stats));
-
-    fscanf(file, "%d", &stats->strength);
-    fscanf(file, "%d", &stats->dexterity);
-    fscanf(file, "%d", &stats->constitution);
-    fscanf(file, "%d", &stats->intelligence);
-    fscanf(file, "%d", &stats->wisdom);
-    fscanf(file, "%d", &stats->charisma);
-
-    character->stats = stats;
-
-    fclose(file);
-    return EXIT_SUCCESS;
-}
-
-int saveCharacter(const struct Character character) {
-    if((setupDir(charDirName)) == EXIT_FAILURE) {
-        error("characters directory setup failed");
-        return EXIT_FAILURE;
-    }
-    char *fname = addStrings(charDirName, character.name);
-    
-    FILE *file = fopen(fname, "w");
-    free(fname);
-    if (file == NULL) {
-        error("file creation failed");
-        return EXIT_FAILURE;
-    }
-    fprintf(file, "%s\n%s\n%d\n", charClassNames[character.charClass], charRaceNames[character.race], character.level);
-
-    //printing stats
-    fprintf(file, "%d\n", character.stats->strength);
-    fprintf(file, "%d\n", character.stats->dexterity);
-    fprintf(file, "%d\n", character.stats->constitution);
-    fprintf(file, "%d\n", character.stats->intelligence);
-    fprintf(file, "%d\n", character.stats->wisdom);
-    fprintf(file, "%d\n", character.stats->charisma);
-
-    fclose(file);
-
-    return EXIT_SUCCESS;
-}
-
 
 void freeCharacter(struct Character *character) {
     if (character != NULL) {

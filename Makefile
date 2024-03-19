@@ -8,7 +8,7 @@ CLEANUP=rm -rf
 .DEFAULT_GOAL := all
 
 CC = gcc
-CFLAGS = -Wall -g -fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -Wall -g -fsanitize=address -fno-omit-frame-pointer -Isqlite
 TEST_FLAGS = -lrt -lm -Iminunit $(CFLAGS)
 CFLAGS += $(shell find $(SRC_DIR) -name "*.h" -type f -exec dirname {} \; | sort -u | sed 's/.*/-I&/')
 
@@ -20,6 +20,7 @@ CHAR_DIR = .characters
 TEST_FILE = test/test.c
 
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
+SRCS += sqlite/sqlite3.c
 TEST_SRCS := $(filter-out $(SRC_DIR)/main.c, $(SRCS))
 OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

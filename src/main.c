@@ -16,11 +16,15 @@
  * =====================================================================================
  */
 #include "main.h"
-#include "character/character.h"
+#include "character.h"
+#include "database.h"
 
 int main() {
     srand(time(NULL));
-    struct Character *character = characterMenu();
+
+    sqlite3 *db = setupDatabase("characters.db");
+
+    struct Character *character = characterMenu(db);
 
     printf("\n\nname: %s\nlevel: %d\n", character->name, character->level);
 
