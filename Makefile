@@ -4,6 +4,7 @@ CLEANUP=rm -rf
 .PHONY: all
 .PHONY: clean
 .PHONY: test
+.PHONY: delete_database
 
 .DEFAULT_GOAL := all
 
@@ -15,7 +16,7 @@ CFLAGS += $(shell find $(SRC_DIR) -name "*.h" -type f -exec dirname {} \; | sort
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
-CHAR_DIR = .characters
+DB = characters.db
 
 TEST_FILE = test/test.c
 
@@ -45,6 +46,9 @@ $(TEST_TARGET): $(TEST_FILE) $(TEST_SRCS)
 	$(CC) $(TEST_FLAGS) $^ -o $@
 
 clean:
-	$(CLEANUP) $(OBJ_DIR) $(BIN_DIR) $(CHAR_DIR)
+	$(CLEANUP) $(OBJ_DIR) $(BIN_DIR)
+
+delete_database:
+	$(CLEANUP) $(DB)
 
 .PRECIOUS: OBJ_DIR%.o

@@ -3,5 +3,5 @@ bin
 obj
 *.swp
 push
-.characters
 doc
+db

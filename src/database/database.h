@@ -33,6 +33,8 @@ struct Character {
  */
 sqlite3 * setupDatabase(char *name);
 
+int setupCharacterTable(sqlite3 *db);
+
 /**
  * @brief load into a Character object from database
  * 

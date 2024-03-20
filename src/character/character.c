@@ -18,8 +18,6 @@
 #include "character.h"
 #include "utils.h"
 
-char *charDirName = ".characters/";
-
 struct Character* characterMenu(sqlite3 *db) {
     printf("do you want to\n\t(1) create a character\n\t(2) load a character\n\t(3) exit\n");
     int choice;
