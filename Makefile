@@ -16,7 +16,7 @@ CFLAGS += $(shell find $(SRC_DIR) -name "*.h" -type f -exec dirname {} \; | sort
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
-DB = characters.db
+DB = db
 
 TEST_FILE = test/test.c
 

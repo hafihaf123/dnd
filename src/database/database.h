@@ -18,6 +18,7 @@
 
 /// @brief structure for characters
 struct Character {
+    int id;
     char *name;
     enum CharClass charClass;
     enum CharRace race;
@@ -28,11 +29,17 @@ struct Character {
 /**
  * @brief opens a database, if it doesn't exist, it creates it
  * 
- * @param name name of the database to open
+ * @param name path to the database file from project root
  * @return sqlite3* the database pointer - failure returns NULL
  */
 sqlite3 * setupDatabase(char *name);
 
+/**
+ * @brief creates a table of characters if it doesn't exist
+ * 
+ * @param db database to setup the table to
+ * @return int EXIT_SUCCESS or EXIT_FAILURE
+ */
 int setupCharacterTable(sqlite3 *db);
 
 /**
@@ -49,8 +56,8 @@ int loadCharacter(struct Character *character, sqlite3 *db);
  * 
  * @param character Character to save
  * @param db database to which the Character will be saved
- * @return int EXIT_SUCCESS or EXIT_FAILURE
+ * @return int id of the saved Character, -1 for failure
  */
-int saveCharacter(const struct Character character, sqlite3 *db);
+int saveCharacter(struct Character character, sqlite3 *db);
 
 #endif // DATABASE_H

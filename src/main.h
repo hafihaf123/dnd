@@ -1,19 +1,7 @@
-/*
- * =====================================================================================
- *
- *       Filename:  main.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 17:13:25
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file main.h
+ * @author hafihaf123
+ * @brief header for the main.c file
  */
 #ifndef MAIN_H
 #define MAIN_H

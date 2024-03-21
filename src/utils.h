@@ -52,7 +52,7 @@ void cleanInputBuffer();
  * If it already exists, it does nothing.
  * 
  * @param name Name of the directory to set up
- * @return int 1 if failed, 0 if successful
+ * @return int EXIT_SUCCESS or EXIT_FAILURE
  */
 int setupDir(char *name);
 
@@ -61,12 +61,12 @@ int setupDir(char *name);
  * 
  * @param string1 first string
  * @param string2 second string
- * @return char* concated string of the 2 arguments
+ * @return char* concatted string of the 2 arguments
  */
 char * addStrings(const char *string1, const char *string2);
 
 /**
- * @brief Get the Enum index from name of its label
+ * @brief get the Enum index from name of its label
  * 
  * @param name a name of a label to check
  * @param enumStringMap array containing the labels of the enum
@@ -76,7 +76,7 @@ char * addStrings(const char *string1, const char *string2);
 int getEnumFromName(const char *name, const char * const *enumStringMap, size_t size);
 
 /**
- * @brief Get input as string
+ * @brief get input as string
  * 
  * @param message message to be displayed when prompting for input
  * @return char* input from user
@@ -84,17 +84,15 @@ int getEnumFromName(const char *name, const char * const *enumStringMap, size_t 
 char * getStringInput(const char *message);
 
 /**
- * @brief Get input as an Integer
+ * @brief get input as an Integer
  * 
  * @param message message to be displayed when prompting for input
- * @return int input from user
+ * @return int number input from user
  */
 int getNumberInput(const char *message);
 
 /**
- * @brief print an error message to the console
- * 
- * @details the output to console is formatted as follows: "Error: %s\n"
+ * @brief print an error message to the console, formatted as follows: "Error: %s\n\n"
  * 
  * @param message error message
  */
