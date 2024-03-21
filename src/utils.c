@@ -1,21 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  utils.c
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 23:19:40
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file utils.c
+ * @author hafihaf123
+ * @brief various utility functions
  */
-
 #include "utils.h"
 
 int sumOfArrExceptMin(int arr[], size_t size) {

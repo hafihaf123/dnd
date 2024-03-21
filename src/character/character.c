@@ -1,19 +1,7 @@
-/*
- * =====================================================================================
- *
- *       Filename:  character.c
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 09:55:28
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file character.c
+ * @author hafihaf123
+ * @brief handles the front-end for creating a Character
  */
 #include "character.h"
 #include "utils.h"

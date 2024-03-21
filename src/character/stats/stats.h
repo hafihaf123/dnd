@@ -1,22 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  stats.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  03/07/24 09:47:28
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file stats.h
+ * @author hafihaf123
+ * @brief header for stats.c
  */
-/// @file stats.h
-
 #ifndef STATS_H
 #define STATS_H
 

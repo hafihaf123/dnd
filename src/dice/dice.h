@@ -1,21 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  dice.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 16:39:45
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file dice.h
+ * @author hafihaf123
+ * @brief header for dice.h
  */
-/// @file dice.h
 #ifndef DICE_H
 #define DICE_H
 

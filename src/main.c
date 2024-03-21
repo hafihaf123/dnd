@@ -1,19 +1,7 @@
-/*
- * =====================================================================================
- *
- *       Filename:  main.c
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 17:11:06
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file main.c
+ * @author hafihaf123
+ * @brief entry point of the program
  */
 #include "main.h"
 #include "character.h"
@@ -28,12 +16,12 @@ int main() {
 
     if (db == NULL) {
         sqlite3_close(db);
-        exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     if (setupCharacterTable(db) == EXIT_FAILURE) {
         sqlite3_close(db);
-        exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     struct Character *character;
@@ -42,7 +30,7 @@ int main() {
         character = characterMenu(db);
     } while (character == NULL);
 
-    if (character == NULL) exit(EXIT_FAILURE);
+    if (character == NULL) return EXIT_FAILURE;
 
     printf("\n\nname: %s\nlevel: %d\nid: %d\n", character->name, character->level, character->id);
 

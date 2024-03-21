@@ -1,22 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  char_race.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  03/07/24 14:58:04
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file char_race.h
+ * @author hafihaf123
+ * @brief header for CharRace
  */
-/// @file char_race.h
-
 #ifndef CHAR_RACE_H
 #define CHAR_RACE_H
 

@@ -1,3 +1,8 @@
+/**
+ * @file test.c
+ * @author hafihaf123
+ * @brief testing functions using MinUnit
+ */
 #include "minunit.h"
 #include "../src/dice/dice.h"
 

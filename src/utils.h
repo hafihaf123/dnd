@@ -1,22 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  utils.h
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 23:23:16
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file utils.h
+ * @author hafihaf123
+ * @brief header for utils.c
  */
-/// @file utils.h
-
 #ifndef UTILS_H
 #define UTILS_H
 

@@ -1,22 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  stats.c
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  03/07/24 09:44:44
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file stats.c
+ * @author hafihaf123
+ * @brief logic involving Stats
  */
-///file stats.c
-
 #include "stats.h"
 #include "dice.h"
 #include "utils.h"
@@ -56,6 +42,7 @@ struct Stats* initStats() {
         }
         choice[i] = n-1;
     }
+
     stats->strength = points[choice[0]];
     stats->constitution = points[choice[1]];
     stats->dexterity = points[choice[2]];

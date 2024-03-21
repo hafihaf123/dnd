@@ -1,22 +1,8 @@
-/*
- * =====================================================================================
- *
- *       Filename:  dice.c
- *
- *    Description:  
- *
- *        Version:  1.0
- *        Created:  02/29/24 16:43:58
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+/**
+ * @file dice.c
+ * @author hafihaf123
+ * @brief logic for dice rolls
  */
-/// @file dice.c
-
 #include "dice.h"
 #include "utils.h"
 

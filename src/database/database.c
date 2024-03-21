@@ -1,9 +1,8 @@
 /**
  * @file database.c
  * @author hafihaf123
- * @brief file containing logic for working with the sqlite database
+ * @brief logic for working with the sqlite database
  */
-
 #include "database.h"
 #include "utils.h"
 

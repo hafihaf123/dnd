@@ -1,5 +1,8 @@
-/// @file character.h
-
+/**
+ * @file character.h
+ * @author hafihaf123
+ * @brief header for character.c
+ */
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
@@ -14,8 +17,6 @@
 #include "char_class.h"
 #include "char_race.h"
 #include "database.h"
-
-// extern char *charDirName; ///< name of directory where characters are saved
 
 /**
  * @brief entry point for selecting a character
