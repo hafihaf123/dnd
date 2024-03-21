@@ -57,8 +57,8 @@ struct Stats* initStats() {
         choice[i] = n-1;
     }
     stats->strength = points[choice[0]];
-    stats->dexterity = points[choice[1]];
-    stats->constitution = points[choice[2]];
+    stats->constitution = points[choice[1]];
+    stats->dexterity = points[choice[2]];
     stats->intelligence = points[choice[3]];
     stats->wisdom = points[choice[4]];
     stats->charisma = points[choice[5]];

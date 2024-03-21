@@ -33,10 +33,8 @@ struct Character* characterMenu(sqlite3 *db) {
         case 1:
             status = createCharacter(character, db);
             break;
-        case 2: {
+        case 2:
             status = loadCharacter(character, db);
-            if (character == NULL) status = EXIT_FAILURE;
-            }
             break;
         case 3:
             freeCharacter(character);
@@ -46,7 +44,6 @@ struct Character* characterMenu(sqlite3 *db) {
             status = EXIT_FAILURE;
     }
     if (status == EXIT_FAILURE) {
-        //TODO
         freeCharacter(character);
         return NULL;
     }
@@ -109,7 +106,8 @@ int createCharacter(struct Character *character, sqlite3 *db) {
     }
     character->stats = stats;
 
-    saveCharacter(*character, db);
+    character->id = saveCharacter(*character, db);
+    if (character->id == -1) return EXIT_FAILURE;    
 
     return EXIT_SUCCESS;
 }

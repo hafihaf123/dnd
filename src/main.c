@@ -19,7 +19,7 @@
 #include "character.h"
 #include "database.h"
 
-char *databsePath = "database/characters.db";
+char *databsePath = "db/database.db"; ///< path to the database file from project root
 
 int main() {
     srand(time(NULL));
@@ -36,9 +36,15 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    struct Character *character = characterMenu(db);
+    struct Character *character;
 
-    printf("\n\nname: %s\nlevel: %d\n", character->name, character->level);
+    do {
+        character = characterMenu(db);
+    } while (character == NULL);
+
+    if (character == NULL) exit(EXIT_FAILURE);
+
+    printf("\n\nname: %s\nlevel: %d\nid: %d\n", character->name, character->level, character->id);
 
     freeCharacter(character);
     

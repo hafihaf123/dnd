@@ -46,6 +46,7 @@ void cleanInputBuffer() {
 int setupDir(char *name) {
     DIR *dir = opendir(".");
     if (dir == NULL) {
+        error("failed opening the root directory");
         return EXIT_FAILURE;
     }
     struct dirent *entry;
@@ -118,5 +119,5 @@ int getNumberInput(const char *message) {
 }
 
 void error(const char *message) {
-    fprintf(stderr, "Error: %s\n", message);
+    fprintf(stderr, "Error: %s\n\n", message);
 }

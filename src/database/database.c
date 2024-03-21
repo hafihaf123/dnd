@@ -10,6 +10,14 @@
 sqlite3 * setupDatabase(char *name) {
     sqlite3 *db;
 
+    char *dirName = strdup(name);
+    char *lastSlash = strrchr(dirName, '/');
+    if (lastSlash != NULL) *lastSlash = '\0';
+    if (setupDir(dirName) == EXIT_FAILURE) {
+        free(dirName);
+        return NULL;
+    } else free(dirName);
+
     int rc = sqlite3_open(name, &db);
 
     if (rc != SQLITE_OK) {
@@ -23,7 +31,7 @@ sqlite3 * setupDatabase(char *name) {
 int setupCharacterTable(sqlite3 *db) {
     const char *query = "CREATE TABLE IF NOT EXISTS characters ("
                         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        "name TEXT NOT NULL,"
+                        "name TEXT NOT NULL UNIQUE,"
                         "class TEXT NOT NULL,"
                         "race TEXT NOT NULL,"
                         "level INTEGER NOT NULL,"
@@ -71,9 +79,9 @@ int loadCharacter(struct Character *character, sqlite3 *db) {
     sqlite3_bind_text(stmt, 1, name, -1, SQLITE_STATIC);
 
     rc = sqlite3_step(stmt);
-    free(name);
 
     if(rc == SQLITE_ROW) {
+        character->id = sqlite3_column_int(stmt, 0);
         character->name = strdup((const char*)sqlite3_column_text(stmt, 1));
         character->charClass = getEnumFromName((const char*)sqlite3_column_text(stmt, 2), charClassNames, ARR_SIZE(charClassNames));
         character->race = getEnumFromName((const char*)sqlite3_column_text(stmt, 3), charRaceNames, ARR_SIZE(charRaceNames));
@@ -96,11 +104,12 @@ int loadCharacter(struct Character *character, sqlite3 *db) {
         return EXIT_FAILURE;
     }
 
+    free(name);
     sqlite3_finalize(stmt);
     return EXIT_SUCCESS;
 }
 
-int saveCharacter(const struct Character character, sqlite3 *db) {
+int saveCharacter(struct Character character, sqlite3 *db) {
     const char *query = "INSERT INTO characters (name, class, race, level, strength, dexterity, constitution, intelligence, wisdom, charisma) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt *stmt;
 
@@ -110,7 +119,7 @@ int saveCharacter(const struct Character character, sqlite3 *db) {
         char *errMsg = addStrings("failed to prepare statement: ", sqlite3_errmsg(db));
         error(errMsg);
         free(errMsg);
-        return EXIT_FAILURE;
+        return -1;
     }
 
     sqlite3_bind_text(stmt, 1, character.name, -1, SQLITE_STATIC);
@@ -130,10 +139,12 @@ int saveCharacter(const struct Character character, sqlite3 *db) {
         char *errMsg = addStrings("inserting into the database failed: ", sqlite3_errmsg(db));
         error(errMsg);
         free(errMsg);
-        return EXIT_FAILURE;
+        return -1;
     }
+
+    int id = sqlite3_last_insert_rowid(db);
 
     sqlite3_finalize(stmt);
 
-    return EXIT_SUCCESS;
+    return id;
 }
