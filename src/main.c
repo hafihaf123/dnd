@@ -7,19 +7,20 @@
 #include "character.h"
 #include "database.h"
 
-char *databsePath = "db/database.db"; ///< path to the database file from project root
+#define DATABASE_PATH "db/database.db" ///< path to the database file from project root
+#define CREATE_CHARACTERS_TABLE_QUERY "sql/createCharactersTable.sql"
 
 int main() {
     srand(time(NULL));
 
-    sqlite3 *db = setupDatabase(databsePath);
+    sqlite3 *db = setupDatabase(DATABASE_PATH);
 
     if (db == NULL) {
         sqlite3_close(db);
         return EXIT_FAILURE;
     }
 
-    if (setupCharacterTable(db) == EXIT_FAILURE) {
+    if (executeFileQuery(db, CREATE_CHARACTERS_TABLE_QUERY) == EXIT_FAILURE) {
         sqlite3_close(db);
         return EXIT_FAILURE;
     }

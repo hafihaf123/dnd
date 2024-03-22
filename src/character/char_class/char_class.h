@@ -9,29 +9,33 @@
 /// @brief enum containing the possible character classes
 enum CharClass {
     BARBARIAN,
+    BARD,
+    CLERIC,
     DRUID,
-    MAGE,
+    FIGHTER,
     MONK,
     PALADIN,
-    PRIEST,
     RANGER,
     ROGUE,
     SORCERER,
-    WARLOCK
+    WARLOCK,
+    WIZARD
 };
 
 /// @brief array containing the labels for #CharClass
 static const char * const charClassNames[] = {
     [BARBARIAN] = "BARBARIAN",
+    [BARD] = "BARD",
+    [CLERIC] = "CLERIC",
     [DRUID] = "DRUID",
-    [MAGE] = "MAGE",
+    [FIGHTER] = "FIGHTER",
     [MONK] = "MONK",
     [PALADIN] = "PALADIN",
-    [PRIEST] = "PRIEST",
     [RANGER] = "RANGER",
     [ROGUE] = "ROGUE",
     [SORCERER] = "SORCERER",
-    [WARLOCK] = "WARLOCK"
+    [WARLOCK] = "WARLOCK",
+    [WIZARD] = "WIZARD",
 };
 
 #endif /* CHAR_CLASS_H */

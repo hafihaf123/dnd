@@ -53,7 +53,7 @@ char * addStrings(const char *string1, const char *string2) {
     size_t resultSize = strlen(string1) + strlen(string2) + 1;
     char *result = (char*)malloc(resultSize);
     if (result == NULL) {
-        perror("string memory allocation failed");
+        error("string memory allocation failed");
         return NULL;
     }
     strcpy(result, string1);
@@ -76,7 +76,22 @@ char * getStringInput(const char *message) {
     printf("%s", message);
     ssize_t read = getline(&input, &len, stdin);
     if (read == -1) {
-        perror("input read failed");
+        error("input read failed");
+        free(input);
+        return NULL;
+    }
+    char *newlinePos = strchr(input, '\n');
+    if (newlinePos != NULL) *newlinePos = '\0';
+
+    return input;
+}
+
+char * getStringFileInput(FILE *file) {
+    char *input = NULL;
+    size_t len = 0;
+    ssize_t read = getline(&input, &len, file);
+    if (read == -1) {
+        error("input read failed");
         free(input);
         return NULL;
     }
@@ -96,7 +111,7 @@ int getNumberInput(const char *message) {
         number = strtol(input, &endptr, 10);
 
         if (endptr == input) {
-            printf("Incorrect integer input. Please enter a valid number.\n");
+            error("Incorrect integer input. Please enter a valid number.");
         } else {
             free(input);
             return number;

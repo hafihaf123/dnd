@@ -30,16 +30,24 @@ struct Character {
  * 
  * @param name path to the database file from project root
  * @return sqlite3* the database pointer - failure returns NULL
- */
-sqlite3 * setupDatabase(char *name);
+ */sqlite3 *setupDatabase(char *name);
 
 /**
+ * @brief executes a query from a file
+ * 
+ * @param db database to which the query will be executed
+ * @param filename name of the file containing the query
+ * @return int EXIT_SUCCESS or EXIT_FAILURE
+ */
+int executeFileQuery(sqlite3 *db, const char *filename);
+
+/*
  * @brief creates a table of characters if it doesn't exist
  * 
  * @param db database to setup the table to
  * @return int EXIT_SUCCESS or EXIT_FAILURE
  */
-int setupCharacterTable(sqlite3 *db);
+// int setupCharacterTable(sqlite3 *db);
 
 /**
  * @brief load into a Character object from database

@@ -6,6 +6,56 @@
 #include "database.h"
 #include "utils.h"
 
+int executeFileQuery(sqlite3 *db, const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        char *errMsg = addStrings("failure opening file: ", filename);
+        error(errMsg);
+        free(errMsg);
+        return EXIT_FAILURE;
+    }
+
+    char *query = strdup("");
+    size_t querySize = 0;
+
+    while (1) {
+        char *line = getStringFileInput(file);
+        if (line == NULL) {
+            free(query);
+            fclose(file);
+            return EXIT_FAILURE;
+        }
+        size_t lineSize = strlen(line);
+
+        char *newQuery = addStrings(query, line);
+        if (newQuery == NULL) {
+            free(line);
+            fclose(file);
+            return EXIT_FAILURE;
+        }
+        free(query);
+        query = strdup(newQuery);
+        querySize += lineSize;
+
+        free(line);
+        free(newQuery);
+
+        if (query[querySize - 1] == ';') break;
+    }
+
+    int rc = sqlite3_exec(db, query, 0, 0, 0);
+    if (rc != SQLITE_OK) {
+        char *errMsg = addStrings("query execution failed: ", sqlite3_errmsg(db));
+        error(errMsg);
+        free(errMsg);
+        return EXIT_FAILURE;
+    }
+
+    fclose(file);
+    free(query);
+    return EXIT_SUCCESS;
+}
+
 sqlite3 * setupDatabase(char *name) {
     sqlite3 *db;
 
@@ -26,7 +76,7 @@ sqlite3 * setupDatabase(char *name) {
 
     return db;
 }
-
+/*
 int setupCharacterTable(sqlite3 *db) {
     const char *query = "CREATE TABLE IF NOT EXISTS characters ("
                         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -50,7 +100,7 @@ int setupCharacterTable(sqlite3 *db) {
     }
     return EXIT_SUCCESS;
 }
-
+*/
 int loadCharacter(struct Character *character, sqlite3 *db) {
     if (character == NULL) {
         error("character struct argument not properly initialised");

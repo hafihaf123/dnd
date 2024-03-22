@@ -8,16 +8,28 @@
 
 /// @brief enum containing the possible character races
 enum CharRace {
-    HUMAN,
+    DWARF,
     ELF,
-    DWARF
+    HALFLING,
+    HUMAN,
+    DRAGONBORN,
+    GNOME,
+    HALF_ELF,
+    HALF_ORC,
+    TIEFLING
 };
 
 /// @brief array containing the labels for #CharRace
 static const char * const charRaceNames[] = {
-    [HUMAN] = "HUMAN",
+    [DWARF] = "DWARF",
     [ELF] = "ELF",
-    [DWARF] = "DWARF"
+    [HALFLING] = "HALFLING",
+    [HUMAN] = "HUMAN",
+    [DRAGONBORN] = "DRAGONBORN",
+    [GNOME] = "GNOME",
+    [HALF_ELF] = "HALF_ELF",
+    [HALF_ORC] = "HALF_ORC",
+    [TIEFLING] = "TIEFLING"
 };
 
 #endif /* CHAR_RACE_H */

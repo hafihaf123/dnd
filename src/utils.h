@@ -47,7 +47,7 @@ int setupDir(char *name);
  * 
  * @param string1 first string
  * @param string2 second string
- * @return char* concatted string of the 2 arguments
+ * @return char* concatted string of the 2 arguments, failure returns NULL
  */
 char * addStrings(const char *string1, const char *string2);
 
@@ -62,12 +62,20 @@ char * addStrings(const char *string1, const char *string2);
 int getEnumFromName(const char *name, const char * const *enumStringMap, size_t size);
 
 /**
- * @brief get input as string
+ * @brief get user input as string
  * 
- * @param message message to be displayed when prompting for input
+ * @param message the prompt for input
  * @return char* input from user
  */
 char * getStringInput(const char *message);
+
+/**
+ * @brief get a string from file (one line)
+ * 
+ * @param file to get the input from (must be opened beforehand)
+ * @return char* one line string from file (null terminated)
+ */
+char *getStringFileInput(FILE *file);
 
 /**
  * @brief get input as an Integer
