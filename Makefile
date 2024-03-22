@@ -46,7 +46,7 @@ $(TEST_TARGET): $(TEST_FILE) $(TEST_SRCS)
 	$(CC) $(TEST_FLAGS) $^ -o $@
 
 clean:
-	$(CLEANUP) $(OBJ_DIR) $(BIN_DIR)
+	$(CLEANUP) $(OBJ_DIR) $(TARGET)
 
 delete_database:
 	$(CLEANUP) $(DB)
