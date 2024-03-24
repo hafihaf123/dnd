@@ -6,6 +6,7 @@
 #include "main.h"
 #include "character.h"
 #include "database.h"
+#include "communication.h"
 
 #define DATABASE_PATH "db/database.db" ///< path to the database file from project root
 #define CREATE_CHARACTERS_TABLE_QUERY "sql/createCharactersTable.sql"
@@ -36,6 +37,8 @@ int main() {
     printf("\n\nname: %s\nlevel: %d\nid: %d\n", character->name, character->level, character->id);
 
     freeCharacter(character);
+
+    communicationMain();
     
     sqlite3_close(db);
 
