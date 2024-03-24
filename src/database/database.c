@@ -76,31 +76,7 @@ sqlite3 * setupDatabase(char *name) {
 
     return db;
 }
-/*
-int setupCharacterTable(sqlite3 *db) {
-    const char *query = "CREATE TABLE IF NOT EXISTS characters ("
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        "name TEXT NOT NULL UNIQUE,"
-                        "class TEXT NOT NULL,"
-                        "race TEXT NOT NULL,"
-                        "level INTEGER NOT NULL,"
-                        "strength INTEGER NOT NULL,"
-                        "constitution INTEGER NOT NULL,"
-                        "dexterity INTEGER NOT NULL,"
-                        "intelligence INTEGER NOT NULL,"
-                        "wisdom INTEGER NOT NULL,"
-                        "charisma INTEGER NOT NULL"
-                        ");";
-    int rc = sqlite3_exec(db, query, 0, 0, 0);
-    if (rc != SQLITE_OK) {
-        char *errMsg = addStrings("table creation failed: ", sqlite3_errmsg(db));
-        error(errMsg);
-        free(errMsg);
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
-}
-*/
+
 int loadCharacter(struct Character *character, sqlite3 *db) {
     if (character == NULL) {
         error("character struct argument not properly initialised");
@@ -147,7 +123,7 @@ int loadCharacter(struct Character *character, sqlite3 *db) {
 
         character->stats = stats;
     } else {
-        char *errMsg = addStrings("could not find character: ", name);
+        char *errMsg = addStrings("could not find character in database: ", name);
         error(errMsg);
         free(errMsg);
         return EXIT_FAILURE;
