@@ -45,11 +45,13 @@ char * receiveMessage(int sockfd) {
             return NULL;
         }
         
-        bytesReceived = recv(sockfd, message, BUFFER_SIZE, 0);
+        bytesReceived = recv(sockfd, message + totalBytes, BUFFER_SIZE, 0);
         if (bytesReceived < 0) {
             error("read from socket failed");
             return NULL;
         }
+
+        printf("Received %ld bytes\n", bytesReceived);
         
         totalBytes += bytesReceived;
     } while (bytesReceived == BUFFER_SIZE);
@@ -92,8 +94,7 @@ int createRoom() {
         return EXIT_FAILURE;
 
     printf("Binding server socket\n");
-    if (bindServerSocket(sockfd) == EXIT_FAILURE)
-    {
+    if (bindServerSocket(sockfd) == EXIT_FAILURE) {
         close(sockfd);
         return EXIT_FAILURE;
     }
@@ -115,24 +116,28 @@ int createRoom() {
         char *receivedMessage = receiveMessage(clientSockfd);
         if (receivedMessage == NULL) {
             error("failed to receive a message");
-            close(sockfd);
-            close(clientSockfd);
-            return EXIT_FAILURE;
+            free(receivedMessage);
+            continue;
         }
 
-        printf("Received: %s", receivedMessage);
-        if (strcmp(receivedMessage, "exit\n") == 0)
+        printf("Received: %s\n", receivedMessage);
+        if (strcmp(receivedMessage, "exit") == 0) {
+            free(receivedMessage);
             break;
+        }
+        free(receivedMessage);
 
         char *messageToSend = getStringInput("You: ");
-        if (send(clientSockfd, messageToSend, sizeof(messageToSend), 0) < 0) {
+        if (send(clientSockfd, messageToSend, strlen(messageToSend), 0) < 0) {
             error("sending the message failed");
-            close(sockfd);
-            close(clientSockfd);
-            return EXIT_FAILURE;
+            free(messageToSend);
+            continue;
         }
-        if (strcmp(messageToSend, "exit\n") == 0)
+        if (strcmp(messageToSend, "exit") == 0) {
+            free(messageToSend);
             break;
+        }
+        free(messageToSend);
     }
 
     printf("Closing sockets\n");
@@ -151,36 +156,46 @@ int joinRoom() {
     serverAddress.sin_port = htons(PORT);
     if (inet_pton(AF_INET, host, &serverAddress.sin_addr) <= 0) {
         error("invalid host address");
+        free(host);
+        close(sockfd);
         return EXIT_FAILURE;
     }
+    free(host);
 
     if (connect(sockfd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0) {
         error("connection failed");
+        close(sockfd);
         return EXIT_FAILURE;
     }
 
     while (1)
     {
         char *messageToSend = getStringInput("You: ");
-        if (send(sockfd, messageToSend, sizeof(messageToSend), 0) < 0) {
+        if (send(sockfd, messageToSend, strlen(messageToSend), 0) < 0) {
             error("sending the message failed");
-            close(sockfd);
-            return EXIT_FAILURE;
+            free(messageToSend);
+            continue;
         }
-        if (strcmp(messageToSend, "exit\n") == 0)
+        if (strcmp(messageToSend, "exit") == 0) {
+            free(messageToSend);
             break;
+        }
+        free(messageToSend);
         
         printf("Receiving message\n");
         char *receivedMessage = receiveMessage(sockfd);
         if (receivedMessage == NULL) {
             error("failed to receive a message");
-            close(sockfd);
-            return EXIT_FAILURE;
+            free(receivedMessage);
+            continue;
         }
 
-        printf("Received: %s", receivedMessage);
-        if (strcmp(receivedMessage, "exit\n") == 0)
+        printf("Received: %s\n", receivedMessage);
+        if (strcmp(receivedMessage, "exit") == 0) {
+            free(receivedMessage);
             break;
+        }
+        free(receivedMessage);
     }
 
     close(sockfd);
